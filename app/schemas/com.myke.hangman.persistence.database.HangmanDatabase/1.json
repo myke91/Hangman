@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "0d4d78dba4501ff16379aaa4c4dd9993",
+    "entities": [
+      {
+        "tableName": "ScoreCard",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playedAt` INTEGER NOT NULL, `wordGuessed` TEXT NOT NULL, `pointsGained` INTEGER NOT NULL, PRIMARY KEY(`playedAt`))",
+        "fields": [
+          {
+            "fieldPath": "playedAt",
+            "columnName": "playedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordGuessed",
+            "columnName": "wordGuessed",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pointsGained",
+            "columnName": "pointsGained",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "playedAt"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d4d78dba4501ff16379aaa4c4dd9993')"
+    ]
+  }
+}
