@@ -3,6 +3,7 @@ package com.myke.hangman.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ import com.myke.hangman.ui.intro.IntroRoute
 fun HangmanNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    navigationActions: HangmanNavigationActions,
     startDestination: String = HangmanDestinations.INTRO_ROUTE
 ) {
     NavHost(
@@ -23,11 +25,10 @@ fun HangmanNavGraph(
         modifier = modifier
     ) {
         composable(HangmanDestinations.INTRO_ROUTE) {
-            IntroRoute()
+            IntroRoute(navigationActions.navigateToGame)
         }
         composable(HangmanDestinations.GAME_ROUTE) {
-            val viewModel: GameViewModel by by viewModels()
-
+            val viewModel: GameViewModel = hiltViewModel()
             GameRoute(viewModel)
         }
     }

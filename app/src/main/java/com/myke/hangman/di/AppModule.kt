@@ -1,5 +1,6 @@
 package com.myke.hangman.di
 
+import com.myke.hangman.engine.GameEngine
 import com.myke.hangman.persistence.database.ScoreCardDao
 import com.myke.hangman.engine.ScoreEngine
 import dagger.Module
@@ -12,5 +13,8 @@ import dagger.hilt.components.SingletonComponent
 class AppModule {
 
     @Provides
-    fun provideScoreManager(scoreCardDao: ScoreCardDao) = ScoreEngine(scoreCardDao)
+    fun provideScoreEngine(scoreCardDao: ScoreCardDao) = ScoreEngine(scoreCardDao)
+
+    @Provides
+    fun provideGameEngine() = GameEngine()
 }

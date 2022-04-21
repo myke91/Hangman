@@ -14,23 +14,9 @@ object HangmanDestinations {
  */
 class HangmanNavigationActions(navController: NavHostController) {
     val navigateToIntro: () -> Unit = {
-        navController.navigate(HangmanDestinations.INTRO_ROUTE) {
-
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-
-            launchSingleTop = true
-            restoreState = true
-        }
+        navController.navigate(HangmanDestinations.INTRO_ROUTE)
     }
     val navigateToGame: () -> Unit = {
-        navController.navigate(HangmanDestinations.GAME_ROUTE) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
+        navController.navigate(HangmanDestinations.GAME_ROUTE)
     }
 }

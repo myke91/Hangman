@@ -96,7 +96,9 @@ fun KeyboardKey(
 ) {
     var pressed by remember { mutableStateOf(false) }
     Text(keyboardKey, Modifier
-        .then(modifier.clickable { onClick() })
+        .then(modifier.clickable {
+            onClick()
+        })
 //        .pressIndicatorGestureFilter(
 //            onStart = { pressed = true },
 //            onStop = { pressed = false },

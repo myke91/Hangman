@@ -1,13 +1,10 @@
 package com.myke.hangman.ui.game
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,23 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.myke.hangman.model.GameState
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.myke.hangman.R
 import com.myke.hangman.SoftKeyboard
-import dagger.hilt.android.AndroidEntryPoint
-
-@AndroidEntryPoint
-class GameActivity : AppCompatActivity() {
-
-    private val gameViewModel: GameViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GameScreen(gameViewModel)
-        }
-    }
-}
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
@@ -41,21 +24,22 @@ fun GameScreen(viewModel: GameViewModel) {
     val word = viewModel.word.collectAsState()
     val lettersUsed = viewModel.lettersUsed.collectAsState()
     val image = viewModel.image.collectAsState()
-    val gameLost = viewModel.gameLost.collectAsState()
     val gameWon = viewModel.gameWon.collectAsState()
+    val gameCompleted = viewModel.gameCompleted.collectAsState()
     val remainingWords = viewModel.remainingWords.collectAsState()
     val remainingAttempts = viewModel.remainingAttempts.collectAsState()
-    val lettersLayout = viewModel.lettersLayout.collectAsState()
+    val enableWordEntry = viewModel.enableWordEntry.collectAsState()
+    val lettersPlayed = remember { mutableStateOf<String>("") }
 
 
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxHeight()
     ) {
 
         Text(
-            text = "Remaining words $remainingWords",
+            text = "Remaining words ${remainingWords.value}",
             color = Color.Red,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
@@ -64,34 +48,36 @@ fun GameScreen(viewModel: GameViewModel) {
                 .padding(8.dp)
         )
 
-        Image(
-            painter = painterResource(id = R.drawable.game0),
-            contentDescription = "hangman image",
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(200.dp, 200.dp)
-                .padding(16.dp)
-        )
-        if (gameWon.value) {
-            Text(
-                text = "You Won!",
-                color = Color.Green,
-                modifier = Modifier
-                    .size(200.dp, 200.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .rotate(-45f)
-            )
-        }
+        ConstraintLayout {
+            val (imageConstraint, textConstraint) = createRefs()
 
-        if (gameLost.value) {
-            Text(
-                text = "You Lost!",
-                color = Color.Red,
+
+            Image(
+                painter = painterResource(id = image.value),
+                contentDescription = "hangman image",
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(imageConstraint) {
+                        top.linkTo(parent.top, margin = 0.dp)
+                    }
                     .size(200.dp, 200.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .rotate(-45f)
             )
+            if (gameCompleted.value == true) {
+                Text(
+                    text = if (gameWon.value) "You Won!" else "You Lost!",
+                    color = if (gameWon.value) Color.Green else Color.Red,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .constrainAs(textConstraint) {
+                            top.linkTo(imageConstraint.top, margin = 0.dp)
+                            bottom.linkTo(imageConstraint.bottom, margin = 0.dp)
+                            start.linkTo(imageConstraint.start, margin = 0.dp)
+                            end.linkTo(imageConstraint.end, margin = 0.dp)
+                        }
+                        .rotate(-45f)
+
+                )
+            }
         }
 
         Text(
@@ -103,8 +89,17 @@ fun GameScreen(viewModel: GameViewModel) {
                 .align(Alignment.CenterHorizontally)
         )
 
+        TextField(value = lettersPlayed.value,
+            enabled = enableWordEntry.value ?: false,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            onValueChange = {
+                lettersPlayed.value = it
+                viewModel.play(it)
+            })
+
         Text(
-            text = "Letters used: $lettersUsed",
+            text = "Letters used: ${lettersUsed.value}",
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier
@@ -113,7 +108,7 @@ fun GameScreen(viewModel: GameViewModel) {
         )
 
         Text(
-            text = "Remaining attempts $remainingAttempts",
+            text = "Remaining attempts ${remainingAttempts.value}",
             fontSize = 16.sp,
             color = Color.Gray,
             modifier = Modifier
@@ -122,19 +117,16 @@ fun GameScreen(viewModel: GameViewModel) {
         )
 
         Button(
-            onClick = { viewModel.startGame() },
+            onClick = {
+                lettersPlayed.value = ""
+                viewModel.startGame()
+            },
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(top = 16.dp)
         ) {
             Text(text = "Start New Game")
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-        SoftKeyboard() {
-
-        }
-
     }
 }
 

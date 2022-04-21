@@ -6,13 +6,17 @@ import com.myke.hangman.R
 import com.myke.hangman.engine.GameEngine
 import com.myke.hangman.engine.ScoreEngine
 import com.myke.hangman.model.GameState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GameViewModel @Inject constructor(val gameEngine: GameEngine, val scoreEngine: ScoreEngine) :
+@HiltViewModel
+class GameViewModel @Inject constructor(
+    private val gameEngine: GameEngine,
+    private val scoreEngine: ScoreEngine
+) :
     ViewModel() {
-    private var _gameState = MutableStateFlow<GameState?>(null)
 
     private var _word = MutableStateFlow<String>("_ _ A B C D _ _ _ _ _ _ _ ")
     val word get() = _word
@@ -20,38 +24,36 @@ class GameViewModel @Inject constructor(val gameEngine: GameEngine, val scoreEng
     private var _lettersUsed = MutableStateFlow<String>("Used Letters: A, B, C, D, E, F, G")
     val lettersUsed get() = _lettersUsed
 
-    private var _image = MutableStateFlow<Int>(-1)
+    private var _image = MutableStateFlow<Int>(R.drawable.game0)
     val image get() = _image
-
-    private var _gameLost = MutableStateFlow<Boolean>(false)
-    val gameLost get() = _gameLost
 
     private var _gameWon = MutableStateFlow<Boolean>(false)
     val gameWon get() = _gameWon
 
-    private var _remainingWords = MutableStateFlow<Int?>(null)
+    private var _remainingWords = MutableStateFlow<Int?>(0)
     val remainingWords get() = _remainingWords
 
-    private var _remainingAttempts = MutableStateFlow<Int?>(null)
+    private var _remainingAttempts = MutableStateFlow<Int?>(0)
     val remainingAttempts get() = _remainingAttempts
 
-    private var _lettersLayout = MutableStateFlow<Boolean?>(false)
-    val lettersLayout get() = _lettersLayout
+    private var _enableWordEntry = MutableStateFlow<Boolean?>(false)
+    val enableWordEntry get() = _enableWordEntry
+
+    private var _gameCompleted = MutableStateFlow<Boolean?>(false)
+    val gameCompleted get() = _gameCompleted
 
 
     fun startGame() {
-        _gameState.value = gameEngine.startNewGame()
-        gameLost.value = false
+        val gameState = gameEngine.startNewGame()
         gameWon.value = false
-        lettersLayout.value = true
+        enableWordEntry.value = true
+        _gameCompleted.value = false
 
-        _gameState.value.let {
-            updateUiState(it)
-        }
+        updateUiState(gameState)
     }
 
-    fun play(letter: Char) {
-        val gameState = gameEngine.play(letter)
+    fun play(letters: String) {
+        val gameState = gameEngine.play(letters.last())
         updateUiState(gameState)
     }
 
@@ -60,6 +62,7 @@ class GameViewModel @Inject constructor(val gameEngine: GameEngine, val scoreEng
             is GameState.Lost -> {
                 showGameLost(gameState.wordToGuess)
                 remainingAttempts.value = gameState.remainingAttempts
+                _gameCompleted.value = true
             }
             is GameState.Running -> {
                 remainingWords.value = gameState.remainingWords
@@ -69,6 +72,7 @@ class GameViewModel @Inject constructor(val gameEngine: GameEngine, val scoreEng
                 image.value = gameState.drawable
             }
             is GameState.Won -> {
+                _gameCompleted.value = true
                 showGameWon(gameState.wordToGuess)
                 showCurrentScore(gameState.wordToGuess)
             }
@@ -87,15 +91,15 @@ class GameViewModel @Inject constructor(val gameEngine: GameEngine, val scoreEng
 
     private fun showGameLost(wordToGuess: String) {
         word.value = wordToGuess
-        gameLost.value = true
+        gameWon.value = false
         image.value = R.drawable.game7
-        lettersLayout.value = false
+        enableWordEntry.value = false
     }
 
     private fun showGameWon(wordToGuess: String) {
         word.value = wordToGuess
         gameWon.value = true
-        lettersLayout.value = false
+        enableWordEntry.value = false
     }
 
 }

@@ -1,6 +1,5 @@
-package com.myke.hangman.ui
+package com.myke.hangman.ui.intro
 
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun IntroScreen(){
+fun IntroScreen(navigateToGame: () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
         Column(
             modifier = Modifier
@@ -39,7 +38,8 @@ fun IntroScreen(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { }) {
+                    onClick = navigateToGame
+                ) {
                     Text("Play")
                 }
             }
