@@ -8,10 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.myke.hangman.R
 
 @Composable
 fun IntroScreen(navigateToGame: () -> Unit) {
@@ -22,7 +24,7 @@ fun IntroScreen(navigateToGame: () -> Unit) {
                 .fillMaxHeight()
         ) {
             Text(
-                text = "Hangman",
+                text = stringResource(id = R.string.app_name),
                 fontSize = 46.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -40,7 +42,7 @@ fun IntroScreen(navigateToGame: () -> Unit) {
                 Button(
                     onClick = navigateToGame
                 ) {
-                    Text("Play")
+                    Text(stringResource(id = R.string.play))
                 }
             }
         }

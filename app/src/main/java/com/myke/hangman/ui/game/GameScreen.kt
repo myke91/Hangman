@@ -11,12 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.myke.hangman.R
-import com.myke.hangman.SoftKeyboard
+import com.myke.hangman.ui.composables.SimpleAlertDialog
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
@@ -29,6 +30,10 @@ fun GameScreen(viewModel: GameViewModel) {
     val remainingWords = viewModel.remainingWords.collectAsState()
     val remainingAttempts = viewModel.remainingAttempts.collectAsState()
     val enableWordEntry = viewModel.enableWordEntry.collectAsState()
+    val pointsGained = viewModel.pointsGained.collectAsState()
+    val showDialog = viewModel.showDialog.collectAsState()
+    val showScoreHistory = viewModel.showScoreHistory.collectAsState()
+
     val lettersPlayed = remember { mutableStateOf<String>("") }
 
 
@@ -39,7 +44,7 @@ fun GameScreen(viewModel: GameViewModel) {
     ) {
 
         Text(
-            text = "Remaining words ${remainingWords.value}",
+            text = stringResource(id = R.string.remaining_words, remainingWords.value.toString()),
             color = Color.Red,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
@@ -51,10 +56,9 @@ fun GameScreen(viewModel: GameViewModel) {
         ConstraintLayout {
             val (imageConstraint, textConstraint) = createRefs()
 
-
             Image(
                 painter = painterResource(id = image.value),
-                contentDescription = "hangman image",
+                contentDescription = stringResource(id = R.string.hangman_image),
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(imageConstraint) {
@@ -62,9 +66,12 @@ fun GameScreen(viewModel: GameViewModel) {
                     }
                     .size(200.dp, 200.dp)
             )
-            if (gameCompleted.value == true) {
+            if (gameCompleted.value) {
                 Text(
-                    text = if (gameWon.value) "You Won!" else "You Lost!",
+                    text = if (gameWon.value)
+                        stringResource(id = R.string.you_won)
+                    else
+                        stringResource(id = R.string.you_lost),
                     color = if (gameWon.value) Color.Green else Color.Red,
                     fontSize = 18.sp,
                     modifier = Modifier
@@ -90,7 +97,7 @@ fun GameScreen(viewModel: GameViewModel) {
         )
 
         TextField(value = lettersPlayed.value,
-            enabled = enableWordEntry.value ?: false,
+            enabled = enableWordEntry.value,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
             onValueChange = {
@@ -99,7 +106,7 @@ fun GameScreen(viewModel: GameViewModel) {
             })
 
         Text(
-            text = "Letters used: ${lettersUsed.value}",
+            text = stringResource(id = R.string.letters_used, lettersUsed.value),
             fontSize = 18.sp,
             color = Color.Gray,
             modifier = Modifier
@@ -108,7 +115,10 @@ fun GameScreen(viewModel: GameViewModel) {
         )
 
         Text(
-            text = "Remaining attempts ${remainingAttempts.value}",
+            text = stringResource(
+                id = R.string.remaining_attempts,
+                remainingAttempts.value.toString()
+            ),
             fontSize = 16.sp,
             color = Color.Gray,
             modifier = Modifier
@@ -125,8 +135,24 @@ fun GameScreen(viewModel: GameViewModel) {
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(top = 16.dp)
         ) {
-            Text(text = "Start New Game")
+            Text(text = stringResource(id = R.string.start_new_game))
         }
     }
+
+    SimpleAlertDialog(
+        show = showDialog.value,
+        onDismiss = { viewModel.onDialogDismiss() },
+        onConfirm = { viewModel.onDialogConfirm() },
+        confirmText = stringResource(id = R.string.view_score_history),
+        dismissText = stringResource(id = R.string.ok),
+        title = stringResource(id = R.string.app_name),
+        content = if (!showScoreHistory.value) {
+            stringResource(id = R.string.score_message, pointsGained.value.toString())
+        } else {
+            viewModel.scoreHistory.value
+        }
+    )
+
+
 }
 

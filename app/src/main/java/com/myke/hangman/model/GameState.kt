@@ -12,5 +12,4 @@ sealed class GameState {
 
     class Lost(val wordToGuess: String, val remainingAttempts: Int) : GameState()
     class Won(val wordToGuess: String) : GameState()
-    class NotStarted : GameState()
 }

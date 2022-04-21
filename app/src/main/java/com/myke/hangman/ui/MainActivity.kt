@@ -31,6 +31,5 @@ fun HangmanApp() {
 
         HangmanNavGraph(navController = navController,
             navigationActions = navigationActions)
-
     }
 }

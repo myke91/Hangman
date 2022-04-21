@@ -5,48 +5,35 @@ import com.myke.hangman.model.GameConstants
 import com.myke.hangman.model.GameState
 import com.myke.hangman.persistence.datastore.PrefDataStoreImpl
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 import kotlin.random.Random
 
 class GameEngine {
-
     private var lettersUsed: String = ""
     private lateinit var underscoreWord: String
     private lateinit var wordToGuess: String
     private val maxTries = 7
     private var currentTries = 0
     private var drawable: Int = R.drawable.game0
-    private val usedWords = mutableListOf<Int>()
+    private var wordCount = listOf<Int>()
 
-    @Inject
-    lateinit var prefDataStoreImpl: PrefDataStoreImpl
-
-    fun startNewGame(): GameState {
+    fun startNewGame(usedWords: List<Int>): Pair<GameState, Int> {
         lettersUsed = ""
         currentTries = 0
-        drawable = R.drawable.game7
         var randomIndex: Int
         while (true) {
             randomIndex = Random.nextInt(0, GameConstants.words.size)
             if (!usedWords.contains(randomIndex)) {
-                break;
+                break
             }
         }
+        wordCount = usedWords
         wordToGuess = GameConstants.words[randomIndex]
-        usedWords.add(randomIndex)
-
         generateUnderscores(wordToGuess)
-        return getGameState()
+        return Pair(getGameState(), randomIndex)
     }
 
-    private fun saveUsedWord(usedWords: List<Int>) {
-        val usedIndexes = usedWords.joinToString(",")
-
-        //todo: make this better
-        runBlocking {
-            prefDataStoreImpl.setUsedWords(usedIndexes)
-        }
-    }
 
     fun generateUnderscores(word: String) {
         val sb = StringBuilder()
@@ -128,7 +115,7 @@ class GameEngine {
     }
 
     private fun getRemainingWords(): Int {
-        return GameConstants.words.size - usedWords.size
+        return GameConstants.words.size - wordCount.size
     }
 
     private fun getRemainingAttempts(): Int {
