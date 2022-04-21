@@ -1,13 +1,9 @@
 package com.myke.hangman.ui.composables
 
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.myke.hangman.R
 
 @Composable
 fun SimpleAlertDialog(

@@ -16,10 +16,6 @@ class ScoreEngine @Inject constructor(val scoreCardDao: ScoreCardDao) {
         }
     }
 
-    fun saveUsedWord(){
-
-    }
-
     suspend fun getScoreHistory(): List<ScoreCard> {
        return withContext(Dispatchers.IO) {
             scoreCardDao.getAll()

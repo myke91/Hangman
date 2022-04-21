@@ -1,5 +1,8 @@
 package com.myke.hangman.ui.game
 
+import android.os.Build
+import android.text.format.DateFormat
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myke.hangman.R
@@ -12,6 +15,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
 
@@ -86,6 +92,7 @@ class GameViewModel @Inject constructor(
             _gameWon.value = false
             _enableWordEntry.value = true
             _gameCompleted.value = false
+            _showScoreHistory.value = false
 
             updateUiState(gameState.first)
             updateUsedWords(gameState.second)
@@ -147,6 +154,11 @@ class GameViewModel @Inject constructor(
     }
 
     fun onDialogConfirm() {
+        _showDialog.value = false
+        viewScoreHistory()
+    }
+
+    fun viewScoreHistory() {
         viewModelScope.launch {
             val scoreCardList = scoreEngine.getScoreHistory()
             val scoreCardBuilder = StringBuilder()
@@ -164,12 +176,17 @@ class GameViewModel @Inject constructor(
             _totalScoreValue.value = totalScore
             _scoreHistory.value = scoreCardBuilder.toString()
             _showScoreHistory.value = true
+            _showDialog.value = true
+
         }
     }
 
     private fun convertTimeStampToDate(time: Long): String {
-        val simpleDateFormat = SimpleDateFormat("dd MMMM, HH:mm:ss", Locale.ENGLISH)
-        return simpleDateFormat.format(time * 1000L)
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = time
+        return DateFormat.format("dd MMMM yyyy HH:mm:ss", calendar).toString()
+
+
     }
 
     private fun showGameLost(wordToGuess: String) {

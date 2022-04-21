@@ -34,7 +34,7 @@ fun GameScreen(viewModel: GameViewModel) {
     val showDialog = viewModel.showDialog.collectAsState()
     val showScoreHistory = viewModel.showScoreHistory.collectAsState()
 
-    val lettersPlayed = remember { mutableStateOf<String>("") }
+    val lettersPlayed = remember { mutableStateOf("") }
 
 
     Column(
@@ -136,6 +136,17 @@ fun GameScreen(viewModel: GameViewModel) {
                 .padding(top = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.start_new_game))
+        }
+
+        Button(
+            onClick = {
+                viewModel.viewScoreHistory()
+            },
+            modifier = Modifier
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(top = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.view_score_history))
         }
     }
 

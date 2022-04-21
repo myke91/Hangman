@@ -14,7 +14,7 @@ class PrefDataStoreImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : PrefDataStore {
     private val STORE_NAME = "com.myke.hangman_data_store"
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = STORE_NAME)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = STORE_NAME)
 
     override suspend fun setUsedWords(usedWords: String) {
         context.dataStore.edit { preferences ->
