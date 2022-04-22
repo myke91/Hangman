@@ -33,4 +33,14 @@ class GameEngineTest {
         assertEquals(underscores3, actual3)
         assertEquals(underscores4, actual4)
     }
+
+    @Test
+    fun `starting game should only return unique words`() {
+        //TODO: implement
+    }
+
+    @Test
+    fun `try attempts is computed correctly`() {
+        //TODO: implement
+    }
 }

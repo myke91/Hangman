@@ -18,5 +18,4 @@ interface ScoreCardDao {
 
     @Query("SELECT sum(pointsGained) from scorecard")
     suspend fun getTotalPoints(): Int
-
 }

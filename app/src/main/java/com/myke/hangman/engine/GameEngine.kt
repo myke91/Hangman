@@ -30,12 +30,12 @@ class GameEngine {
         }
         wordCount = usedWords
         wordToGuess = GameConstants.words[randomIndex]
-        generateUnderscores(wordToGuess)
+        underscoreWord = generateUnderscores(wordToGuess)
         return Pair(getGameState(), randomIndex)
     }
 
 
-    fun generateUnderscores(word: String) {
+    fun generateUnderscores(word: String): String {
         val sb = StringBuilder()
         word.forEach { char ->
             if (char == '/') {
@@ -44,7 +44,7 @@ class GameEngine {
                 sb.append("_")
             }
         }
-        underscoreWord = sb.toString()
+        return sb.toString()
     }
 
     fun play(letter: Char): GameState {

@@ -1,7 +1,15 @@
 # Hangman - Android
 A simple [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) game made in Kotlin with compose.
 
+This project was build using MVVM with Clean Architecture and using Jetpack Compose.
 
+Navigation compose [navigation compose](https://developer.android.com/jetpack/compose/navigation) was used for navigating
+
+[Hilt](https://developer.android.com/jetpack/compose/libraries#hilt) was used
+for dependency injection to prevent managing dependencies manually as the application scales.
+
+
+##Requirements
 As a user, when I'm in a game session,
 I want to see my score history,
 I want to start a new game, 
@@ -14,10 +22,6 @@ I want to be able to try out letters in any order I want,
 I want to know how many points I made when I completed a word,
 I want that my game state is persisted.
 
-We want to see a creative code base, take your time and only deliver to us something 
-you are comfortable with and represents the best state of your work.
-
-Please use a public git repository as we want to see how you interact with git, 
-hinting into frequent and clear commits.
-
-Enjoy! 🥳
+## Improvements
+- Implement test stubs and increase test coverage
+- Receive words to play from backend api instead of using a hardcoded list

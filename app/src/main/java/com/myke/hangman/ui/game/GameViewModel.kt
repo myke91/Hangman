@@ -26,8 +26,7 @@ class GameViewModel @Inject constructor(
     private val gameEngine: GameEngine,
     private val scoreEngine: ScoreEngine,
     private val prefDataStoreImpl: PrefDataStoreImpl
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private var _word = MutableStateFlow("_ _ A B C D _ _ _ _ _ _ _ ")
     val word get() = _word.asStateFlow()
@@ -64,10 +63,6 @@ class GameViewModel @Inject constructor(
 
     private val _scoreHistory = MutableStateFlow("")
     val scoreHistory get() = _scoreHistory.asStateFlow()
-
-    private var _totalScoreValue = MutableStateFlow(0)
-    val totalScoreValue get() = _totalScoreValue.asStateFlow()
-
 
     fun startGame() {
         initializeGame()
@@ -159,10 +154,10 @@ class GameViewModel @Inject constructor(
     }
 
     fun viewScoreHistory() {
+        _showDialog.value = false
         viewModelScope.launch {
             val scoreCardList = scoreEngine.getScoreHistory()
             val scoreCardBuilder = StringBuilder()
-            var totalScore = 0
             for (score in scoreCardList) {
                 scoreCardBuilder
                     .append(convertTimeStampToDate(score.playedAt)).append("\n")
@@ -170,14 +165,11 @@ class GameViewModel @Inject constructor(
                     .append(score.pointsGained)
                     .append("\n\n")
 
-                totalScore += score.pointsGained
             }
 
-            _totalScoreValue.value = totalScore
             _scoreHistory.value = scoreCardBuilder.toString()
             _showScoreHistory.value = true
             _showDialog.value = true
-
         }
     }
 
@@ -185,8 +177,6 @@ class GameViewModel @Inject constructor(
         val calendar = Calendar.getInstance(Locale.getDefault())
         calendar.timeInMillis = time
         return DateFormat.format("dd MMMM yyyy HH:mm:ss", calendar).toString()
-
-
     }
 
     private fun showGameLost(wordToGuess: String) {

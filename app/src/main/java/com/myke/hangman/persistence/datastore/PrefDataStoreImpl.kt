@@ -24,7 +24,7 @@ class PrefDataStoreImpl @Inject constructor(
 
     val savedUsedWords: Flow<String> = context.dataStore.data
         .map { preferences ->
-            val words = preferences[PreferencesKeys.USED_WORDS] ?: ""
-            words
+            val wordIndices = preferences[PreferencesKeys.USED_WORDS] ?: ""
+            wordIndices
         }
 }
