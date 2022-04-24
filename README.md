@@ -28,9 +28,9 @@ As a user, when I'm playing the match,
 - Type safe dependency management (with [Kotlin DSL](https://kotlinlang.org/docs/type-safe-builders.html))
 
 ## Getting started
-Clone this repository preferably with Android Studio 
-Build project and then run application. In the situation where you are asked about trusting the application please do select yes 
-Please make sure you are on the *master* branch as that has all the latest changes.
+- Clone this repository preferably with Android Studio 
+- Build project and then run application. In the situation where you are asked about trusting the application please do select yes 
+- Please make sure you are on the *master* branch as that has all the latest changes.
 
 
 ## Improvements
