@@ -1,7 +1,7 @@
 # Hangman - Android
 A simple [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) game made in Kotlin with compose.
 
-This project was build using MVVM and using Jetpack Compose.
+This project was build using MVVM with Clean Architecture and using Jetpack Compose.
 
 Navigation compose [navigation compose](https://developer.android.com/jetpack/compose/navigation) was used for navigating
 
