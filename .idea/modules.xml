@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Hangman.iml" filepath="$PROJECT_DIR$/.idea/modules/Hangman.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Hangman.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Hangman.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Hangman.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/Hangman.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/Hangman.feature.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/Hangman.feature.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/basic/Hangman.feature.basic.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/basic/Hangman.feature.basic.iml" />
     </modules>
   </component>
 </project>

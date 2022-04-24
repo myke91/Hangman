@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.myke.hangman.persistence.database.HangmanDatabase
-import com.myke.hangman.persistence.database.ScoreCard
-import com.myke.hangman.persistence.database.ScoreCardDao
+import com.myke.hangman.feature.basic.persistence.database.HangmanDatabase
+import com.myke.hangman.feature.basic.persistence.database.ScoreCard
+import com.myke.hangman.feature.basic.persistence.database.ScoreCardDao
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.After

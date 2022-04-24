@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Hangman">
 
         <activity
-            android:name="com.myke.hangman.ui.MainActivity"
+            android:name="com.myke.hangman.MainActivity"
             android:theme="@style/Theme.Hangman.NoActionBar"
             android:exported="true">
             <intent-filter>
