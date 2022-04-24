@@ -11,10 +11,10 @@ interface ScoreCardDao {
     fun getAll(): List<ScoreCard>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(car: List<ScoreCard>)
+    suspend fun insertAll(scores: List<ScoreCard>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(car: ScoreCard)
+    suspend fun insert(score: ScoreCard)
 
     @Query("SELECT sum(pointsGained) from scorecard")
     suspend fun getTotalPoints(): Int

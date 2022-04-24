@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.myke.hangman.R
 import com.myke.hangman.engine.GameEngine
 import com.myke.hangman.engine.ScoreEngine
+import com.myke.hangman.interactors.TimestampConverterUseCase
 import com.myke.hangman.model.GameState
 import com.myke.hangman.persistence.datastore.PrefDataStoreImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     private val gameEngine: GameEngine,
     private val scoreEngine: ScoreEngine,
-    private val prefDataStoreImpl: PrefDataStoreImpl
+    private val prefDataStoreImpl: PrefDataStoreImpl,
+    private val usecase: TimestampConverterUseCase
 ) : ViewModel() {
 
     private var _word = MutableStateFlow("_ _ A B C D _ _ _ _ _ _ _ ")
@@ -160,7 +162,7 @@ class GameViewModel @Inject constructor(
             val scoreCardBuilder = StringBuilder()
             for (score in scoreCardList) {
                 scoreCardBuilder
-                    .append(convertTimeStampToDate(score.playedAt)).append("\n")
+                    .append(usecase.run(score.playedAt)).append("\n")
                     .append(score.wordGuessed).append("\n")
                     .append(score.pointsGained)
                     .append("\n\n")
@@ -171,12 +173,6 @@ class GameViewModel @Inject constructor(
             _showScoreHistory.value = true
             _showDialog.value = true
         }
-    }
-
-    private fun convertTimeStampToDate(time: Long): String {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeInMillis = time
-        return DateFormat.format("dd MMMM yyyy HH:mm:ss", calendar).toString()
     }
 
     private fun showGameLost(wordToGuess: String) {

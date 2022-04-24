@@ -67,7 +67,7 @@ class GameEngine {
             }
         }
 
-        var finalUnderscoreWord = "" + underscoreWord // _ _ _ _ _ _ _ -> E _ _ _ _ _ _
+        var finalUnderscoreWord = "" + underscoreWord
         indexes.forEach { index ->
             val sb = StringBuilder(finalUnderscoreWord).also { it.setCharAt(index, letter) }
             finalUnderscoreWord = sb.toString()
